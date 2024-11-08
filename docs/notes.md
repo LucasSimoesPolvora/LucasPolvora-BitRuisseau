@@ -7,4 +7,7 @@
 <li>
 1h-DONE do the project planification
 </li>
+<li>
+45m-WIP Start the project report
+</li>
 </ul>
