@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes
 {
-    internal class Image
+    class Image(string title, string author, int size) : Media(title, author, size)
     {
+
     }
 }
