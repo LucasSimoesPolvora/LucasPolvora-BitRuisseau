@@ -9,12 +9,17 @@ namespace BitRuisseau.Classes
     public class Audio(string title, string author, int size, TimeSpan duration) : Media(title, author, size)
     {
         private TimeSpan _duration = duration;
+        private string _type = "audio";
 
         // Property to get or set the duration
         public TimeSpan Duration
         {
             get { return _duration; }
             set { _duration = value; }
+        }
+        public string type
+        {
+            get { return _type; }
         }
     }
 }
