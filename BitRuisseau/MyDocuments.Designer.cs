@@ -177,6 +177,7 @@
             Controls.Add(Panel);
             Name = "MyDocuments";
             Text = "BitRuisseau";
+            Load += OnPageLoad;
             Panel.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
