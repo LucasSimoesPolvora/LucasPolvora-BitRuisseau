@@ -20,6 +20,9 @@
 <li>
 20m-WIP Do the functional analysis in the report 
 </li>
+<li>
+10m-DONE Fix a commit issue
+</li>
 </ul>
 
 ![Image 1](./Image/resultMeeting1.jpeg)
