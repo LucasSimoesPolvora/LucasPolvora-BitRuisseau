@@ -17,6 +17,9 @@
 <li>
 25m-DONE meeting with the project manager : We talked about the protocols and how the app will work (Which fields the files must have,etc) (See image 1)
 </li>
+<li>
+20m-WIP Do the functional analysis in the report 
+</li>
 </ul>
 
 ![Image 1](./Image/resultMeeting1.jpeg)
