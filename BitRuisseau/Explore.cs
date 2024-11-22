@@ -17,7 +17,11 @@ namespace BitRuisseau
         {
             InitializeComponent();
         }
-
-        
+        private void MyDocumentsButton_Click(object sender, EventArgs e)
+        {
+            md = new MyDocuments();
+            md.Show();
+            this.Hide();
+        }
     }
 }

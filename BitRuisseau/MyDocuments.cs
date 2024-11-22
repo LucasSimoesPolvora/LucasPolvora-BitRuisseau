@@ -7,6 +7,7 @@ namespace BitRuisseau
     {
         public List<Media> mediaLibrary = new List<Media>();
         NetworkSelection networkSelection;
+        Explore explore;
         public MyDocuments()
         {
             InitializeComponent();
@@ -46,6 +47,14 @@ namespace BitRuisseau
         {
             networkSelection = new NetworkSelection();
             networkSelection.ShowDialog();
+        }
+
+        private void ExploreButton_Click(object sender, EventArgs e)
+        {
+            explore = new Explore();
+            explore.Show();
+            this.Hide();
+            explore.BringToFront();
         }
     }
 }

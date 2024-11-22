@@ -94,6 +94,7 @@
             ExploreButton.TabIndex = 1;
             ExploreButton.Text = "Explore";
             ExploreButton.UseVisualStyleBackColor = false;
+            ExploreButton.Click += ExploreButton_Click;
             // 
             // MyDocumentsButton
             // 
