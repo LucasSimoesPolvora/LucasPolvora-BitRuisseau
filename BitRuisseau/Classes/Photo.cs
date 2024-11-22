@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes
 {
-    class Image(string title, string author, long size) : Media(title, author, size)
+    class Photo(string title, string author, long size) : Media(title, author, size)
     {
         private string _type = "image";
         public string type
