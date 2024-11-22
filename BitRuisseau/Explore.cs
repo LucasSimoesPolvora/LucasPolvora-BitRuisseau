@@ -28,8 +28,6 @@ namespace BitRuisseau
         private void ExitButton_Click(object sender, EventArgs e)
         {
             this.Close();
-            md.Close();
-            ns.Close();
         }
     }
 }

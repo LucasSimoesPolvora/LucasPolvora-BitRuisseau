@@ -60,8 +60,6 @@ namespace BitRuisseau
         private void ExitButton_Click(object sender, EventArgs e)
         {
             this.Close();
-            explore.Close();
-            networkSelection.Close();
         }
     }
 }
