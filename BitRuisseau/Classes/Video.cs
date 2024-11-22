@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes
 {
-    public class Video(string title, string author, int size, TimeSpan duration) : Media(title, author, size)
+    public class Video(string title, string author, long size, TimeSpan duration) : Media(title, author, size)
     {
         private TimeSpan _duration = duration;
         private string _type = "video";
