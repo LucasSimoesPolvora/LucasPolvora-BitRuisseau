@@ -11,8 +11,8 @@ namespace BitRuisseau.Classes
     {
         private string _title;
         private string _artist;
-        private int _size;
-        public Media(string title, string artist, int size)
+        private long _size;
+        public Media(string title, string artist, long size)
         {
             _title = title;
             _artist = artist;
@@ -30,7 +30,7 @@ namespace BitRuisseau.Classes
             set { _artist = value; }
         }
 
-        public int Size
+        public long Size
         {
             get { return _size; }
             set { _size = value; }
