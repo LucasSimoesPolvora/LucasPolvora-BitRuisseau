@@ -5,13 +5,15 @@ namespace BitRuisseau
 {
     public partial class MyDocuments : Form
     {
-        public List<Media> mediaLibrary= new List<Media>();
+        public List<Media> mediaLibrary = new List<Media>();
+        NetworkSelection networkSelection;
         public MyDocuments()
         {
             InitializeComponent();
+            populateDataGrid();
         }
 
-        private void OnPageLoad(object sender, EventArgs e)
+        private void populateDataGrid()
         {
             string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\audios";
             string[] filePaths = Directory.GetFiles(path);
@@ -20,20 +22,30 @@ namespace BitRuisseau
             {
                 var tfile = TagLib.File.Create(filePath);
                 string title = tfile.Tag.Title;
-                string author = tfile.Tag.FirstArtist;
+                string artist = tfile.Tag.FirstArtist;
+                long size = new FileInfo(filePath).Length;
+                TimeSpan duration = new TimeSpan(tfile.Properties.Duration.Hours, tfile.Properties.Duration.Minutes, tfile.Properties.Duration.Seconds);
                 switch (tfile.Properties.MediaTypes)
                 {
                     case TagLib.MediaTypes.Audio:
-                        //mediaLibrary.Add(new Audio());
+                        mediaLibrary.Add(new Audio(title, artist, size, duration));
                         break;
                     case TagLib.MediaTypes.Video:
-
+                        mediaLibrary.Add(new Video(title, artist, size, duration));
                         break;
                     case TagLib.MediaTypes.Photo:
-
+                        mediaLibrary.Add(new Photo(title, artist, size));
                         break;
                 }
             });
+
+            DataGrid.DataSource = mediaLibrary;
+        }
+
+        private void OpenNetworkSelection(object sender, EventArgs e)
+        {
+            networkSelection = new NetworkSelection();
+            networkSelection.ShowDialog();
         }
     }
 }

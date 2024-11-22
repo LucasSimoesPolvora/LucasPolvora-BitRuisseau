@@ -82,6 +82,7 @@
             ChooseNetworkButton.TabIndex = 2;
             ChooseNetworkButton.Text = "Choose Network";
             ChooseNetworkButton.UseVisualStyleBackColor = false;
+            ChooseNetworkButton.Click += OpenNetworkSelection;
             // 
             // ExploreButton
             // 
@@ -177,7 +178,6 @@
             Controls.Add(Panel);
             Name = "MyDocuments";
             Text = "BitRuisseau";
-            Load += OnPageLoad;
             Panel.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
