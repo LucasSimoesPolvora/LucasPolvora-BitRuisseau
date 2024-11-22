@@ -42,6 +42,7 @@ namespace BitRuisseau
             try
             {
                 var connectResult = _mqttClient.ConnectAsync(options).Result;
+                await _mqttClient.SubscribeAsync("test");
             }
             catch(Exception ex)
             {
@@ -51,7 +52,7 @@ namespace BitRuisseau
                     MessageBoxIcon.Error);        
             }
 
-            await _mqttClient.SubscribeAsync("test");
+            
             this.Close();
         }
     }
