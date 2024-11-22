@@ -13,6 +13,7 @@ namespace BitRuisseau
     public partial class Explore : Form
     {
         MyDocuments md;
+        NetworkSelection ns;
         public Explore()
         {
             InitializeComponent();
@@ -22,6 +23,13 @@ namespace BitRuisseau
             md = new MyDocuments();
             md.Show();
             this.Hide();
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            md.Close();
+            ns.Close();
         }
     }
 }

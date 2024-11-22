@@ -56,5 +56,12 @@ namespace BitRuisseau
             this.Hide();
             explore.BringToFront();
         }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            explore.Close();
+            networkSelection.Close();
+        }
     }
 }
