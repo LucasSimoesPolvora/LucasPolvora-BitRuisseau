@@ -10,12 +10,12 @@ namespace BitRuisseau.Classes
     public class Media
     {
         private string _title;
-        private string _author;
+        private string _artist;
         private int _size;
-        public Media(string title, string author, int size)
+        public Media(string title, string artist, int size)
         {
             _title = title;
-            _author = author;
+            _artist = artist;
             _size = size;
         }
 
@@ -24,10 +24,10 @@ namespace BitRuisseau.Classes
             get { return _title; }
             set { _title = value; }
         }
-        public string Author
+        public string Artist
         {
-            get { return _author; }
-            set { _author = value; }
+            get { return _artist; }
+            set { _artist = value; }
         }
 
         public int Size
