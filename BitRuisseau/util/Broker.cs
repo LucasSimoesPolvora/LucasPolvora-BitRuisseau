@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BitRuisseau.Classes;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace BitRuisseau.util
 {
@@ -75,6 +77,39 @@ namespace BitRuisseau.util
             }
         }
 
-        
+        public void AskForCatalog()
+        {
+            if (mqttHost == null || mqttUsername == null || mqttPassword == null)
+            {
+                MessageBox.Show("You did not established a connection to the broker", "connection not established", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+        }
+
+        public void getMessages()
+        {
+            if (mqttClient != null)
+            {
+                mqttClient.ApplicationMessageReceivedAsync += e =>
+                {
+                    ReceiveMessages(e);
+                    return Task.CompletedTask;
+                };
+            }
+        }
+
+        public void ReceiveMessages(MqttApplicationMessageReceivedEventArgs message)
+        {
+            try
+            {
+                Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(message.ApplicationMessage.Payload)}");
+                GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(Encoding.UTF8.GetString(message.ApplicationMessage.Payload));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was an error while receiving messages", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
