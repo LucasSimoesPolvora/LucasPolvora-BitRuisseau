@@ -14,7 +14,7 @@ namespace BitRuisseau
 {
     public partial class NetworkSelection : Form
     {
-        Broker broker = new Broker(); 
+        public Broker broker = new Broker();
         public NetworkSelection()
         {
             InitializeComponent();
@@ -23,8 +23,12 @@ namespace BitRuisseau
         private void ConnectionButton(object sender, EventArgs e)
         {
             broker.connectionToTheBroker(HostTextBox.Text, UsernameTextBox.Text, PasswordTextBox.Text, Convert.ToInt32(PortValue.Value));
-            
             this.Close();
+        }
+
+        public Broker returnBroker()
+        {
+            return broker;
         }
     }
 }

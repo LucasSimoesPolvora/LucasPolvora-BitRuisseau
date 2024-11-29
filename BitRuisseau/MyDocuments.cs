@@ -1,4 +1,5 @@
 using BitRuisseau.Classes;
+using BitRuisseau.util;
 using System.Diagnostics;
 using System.Reflection;
 using TagLib;
@@ -10,6 +11,7 @@ namespace BitRuisseau
         public List<Media> mediaLibrary = new List<Media>();
         NetworkSelection networkSelection;
         Explore explore;
+        Broker broker;
         public MyDocuments()
         {
             InitializeComponent();
@@ -56,6 +58,7 @@ namespace BitRuisseau
         {
             networkSelection = new NetworkSelection();
             networkSelection.ShowDialog();
+            broker = networkSelection.returnBroker();
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace BitRuisseau
         /// <param name="e"></param>
         private void ExploreButton_Click(object sender, EventArgs e)
         {
-            explore = new Explore();
+            explore = new Explore(broker);
             explore.Show();
             this.Hide();
             explore.BringToFront();

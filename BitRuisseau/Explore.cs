@@ -15,12 +15,10 @@ namespace BitRuisseau
     public partial class Explore : Form
     {
         MyDocuments md;
-        NetworkSelection ns;
-        Broker broker;
-        public Explore()
+        public Explore(Broker broker)
         {
             InitializeComponent();
-            getMessages();
+            getMessages(broker);
         }
         private void MyDocumentsButton_Click(object sender, EventArgs e)
         {
@@ -29,18 +27,9 @@ namespace BitRuisseau
             this.Hide();
         }
 
-        private void getMessages()
+        private void getMessages(Broker broker)
         {
-            ns = new NetworkSelection();
-
-            /*if(broker.mqttClient != null)
-            {
-                broker.mqttClient.ApplicationMessageReceivedAsync += e =>
-                {
-                    Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment)}");
-                    return Task.CompletedTask;
-                };
-            }*/
+            broker.getMessages();
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
