@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BitRuisseau.util;
 
 namespace BitRuisseau
 {
@@ -15,6 +16,7 @@ namespace BitRuisseau
     {
         MyDocuments md;
         NetworkSelection ns;
+        Broker broker;
         public Explore()
         {
             InitializeComponent();
@@ -31,14 +33,14 @@ namespace BitRuisseau
         {
             ns = new NetworkSelection();
 
-            if(ns._mqttClient != null)
+            /*if(broker.mqttClient != null)
             {
-                ns._mqttClient.ApplicationMessageReceivedAsync += e =>
+                broker.mqttClient.ApplicationMessageReceivedAsync += e =>
                 {
                     Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment)}");
                     return Task.CompletedTask;
                 };
-            }
+            }*/
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
