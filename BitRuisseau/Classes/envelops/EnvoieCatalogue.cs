@@ -7,7 +7,7 @@ using TagLib.Flac;
 
 namespace BitRuisseau.Classes.envelops
 {
-    public class EnvoieCatalogue
+    public class EnvoieCatalogue : GenericEnvelope
     {
         private List<Media> _content;
 

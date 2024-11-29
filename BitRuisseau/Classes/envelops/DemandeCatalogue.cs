@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes.envelops
 {
-    public class DemandeCatalogue
+    public class DemandeCatalogue : GenericEnvelope
     {
         private string _content;
 

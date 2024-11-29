@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes.envelops
 {
-    public class EnvoieFichier
+    public class EnvoieFichier : GenericEnvelope
     {
         private string _content;
 
