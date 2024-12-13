@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TagLib.Flac;
 
 namespace BitRuisseau.Classes.envelops
 {
-    public class DemandeCatalogue : IJsonSerializableMessage
+    public class CatalogSender : IJsonSerializableMessage
     {
-        private string _content;
+        private List<Media> _content;
 
-        public string Content { get => _content; set => _content = value; }
+        public List<Media> Content { get => _content; set => _content = value; }
 
         public string ToJson()
         {
