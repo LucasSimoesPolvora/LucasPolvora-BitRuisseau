@@ -105,6 +105,7 @@ namespace BitRuisseau.util
             {
                 Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(message.ApplicationMessage.Payload)}");
                 GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(Encoding.UTF8.GetString(message.ApplicationMessage.Payload));
+                Debug.Write(envelope);
             }
             catch (Exception ex)
             {

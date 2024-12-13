@@ -14,9 +14,17 @@ namespace BitRuisseau
 {
     public partial class Explore : Form
     {
-        MyDocuments md;
+        MyDocuments? md;
+        NetworkSelection networkSelection;
+
         public Explore(Broker broker)
         {
+            if (broker == null)
+            {
+                networkSelection = new NetworkSelection();
+                networkSelection.ShowDialog();
+                broker = networkSelection.returnBroker();
+            }
             InitializeComponent();
             getMessages(broker);
         }
@@ -27,7 +35,7 @@ namespace BitRuisseau
             this.Hide();
         }
 
-        private void getMessages(Broker broker)
+        private void getMessages(Broker? broker)
         {
             broker.getMessages();
         }

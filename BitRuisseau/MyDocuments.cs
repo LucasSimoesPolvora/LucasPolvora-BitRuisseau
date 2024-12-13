@@ -72,6 +72,7 @@ namespace BitRuisseau
             explore.Show();
             this.Hide();
             explore.BringToFront();
+
         }
 
         /// <summary>
