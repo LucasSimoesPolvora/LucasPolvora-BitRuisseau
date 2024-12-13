@@ -24,6 +24,8 @@ namespace BitRuisseau.util
         string _clientID;
         string _topic = "test";
 
+        Dictionary<string, List<Media>> _senderAndTheirCatalog = new Dictionary<string, List<Media>>();
+
         MyDocuments _md = new MyDocuments();
 
         /// <summary>
@@ -74,6 +76,8 @@ namespace BitRuisseau.util
                         .Build();
                     // S'abonner à un topic
                     await mqttClient.SubscribeAsync(subscribeOptions);
+
+                    SendMessage(null, MessageType.DEMANDE_CATALOGUE);
                     
                 }
             }
@@ -112,7 +116,6 @@ namespace BitRuisseau.util
         {
             try
             {
-                Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(message.ApplicationMessage.Payload)}");
                 GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(Encoding.UTF8.GetString(message.ApplicationMessage.Payload));
                 Debug.Write(envelope);
                 if (_clientID == envelope.SenderId) return;
@@ -120,8 +123,11 @@ namespace BitRuisseau.util
                 switch(envelope.MessageType)
                 {
                     case MessageType.ENVOIE_CATALOGUE:
+                        var listOfMedias = JsonSerializer.Deserialize<EnvoieCatalogue>(envelope.EnveloppeJson);
+                        _senderAndTheirCatalog.Add(envelope.SenderId, listOfMedias.Content);
                         break;
                     case MessageType.ENVOIE_FICHIER:
+                        
                         break;
                     case MessageType.DEMANDE_CATALOGUE:
                         EnvoieCatalogue envoieCatalogue = new EnvoieCatalogue();
@@ -142,7 +148,7 @@ namespace BitRuisseau.util
         {
             GenericEnvelope envelop = new GenericEnvelope();
             envelop.SenderId = _clientID;
-            envelop.EnveloppeJson = content.ToJson();
+            envelop.EnveloppeJson = content == null ? null : content.ToJson();
             envelop.MessageType = messageType;
 
             var a = new MqttApplicationMessageBuilder()
