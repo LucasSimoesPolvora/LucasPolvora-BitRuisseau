@@ -14,10 +14,10 @@ namespace BitRuisseau.Classes
         private string _title;
         private string _artist;
         private long _size;
-        private TimeSpan? _duration;
-        private MediaTypes _type;
+        private string _duration;
+        private string _type;
 
-        public Media(string title, string artist, long size, TimeSpan? duration, MediaTypes type)
+        public Media(string title, string artist, long size, string duration, string type)
         {
             _title = title;
             _artist = artist;
@@ -41,12 +41,12 @@ namespace BitRuisseau.Classes
             get { return _size; }
             set { _size = value; }
         }
-        public TimeSpan? Duration
+        public string Duration
         {
             get { return _duration; }
             set { _duration = value; }
         }
-        public MediaTypes Type
+        public string Type
         {
             get { return _type; }
             set { _type = value; }

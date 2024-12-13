@@ -65,17 +65,18 @@ namespace BitRuisseau
                 string title = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath);
                 string artist = tfile.Tag.FirstArtist;
                 long size = new FileInfo(filePath).Length;
+                string type = Path.GetExtension(filePath);
                 TimeSpan duration = new TimeSpan(tfile.Properties.Duration.Hours, tfile.Properties.Duration.Minutes, tfile.Properties.Duration.Seconds);
                 switch (tfile.Properties.MediaTypes)
                 {
                     case TagLib.MediaTypes.Audio:
-                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Audio));
+                        mediaLibrary.Add(new Media(title, artist, size, duration, type));
                         break;
                     case TagLib.MediaTypes.Video:
-                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Video));
+                        mediaLibrary.Add(new Media(title, artist, size, duration, type));
                         break;
                     case TagLib.MediaTypes.Photo:
-                        mediaLibrary.Add(new Media(title, artist, size, null, MediaTypes.Photo));
+                        mediaLibrary.Add(new Media(title, artist, size, null, type));
                         break;
                 }
             });

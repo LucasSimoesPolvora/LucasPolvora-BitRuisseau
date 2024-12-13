@@ -21,10 +21,12 @@ namespace BitRuisseau.util
         int mqttPort;
         string mqttUsername;
         string mqttPassword;
-        string _clientID;
-        string _topic = "test";
+        string _clientID = "lucasSP";
+        string _topic = "testlucas";
 
-        Dictionary<string, List<Media>> _senderAndTheirCatalog = new Dictionary<string, List<Media>>();
+        public Dictionary<string, List<Media>> _senderAndTheirCatalog = new Dictionary<string, List<Media>>();
+
+        public event Action? OnNewMediaReceived;
 
         MyDocuments _md = new MyDocuments();
 
@@ -48,7 +50,6 @@ namespace BitRuisseau.util
             mqttPort = port;
             mqttUsername = username;
             mqttPassword = password;
-            _clientID = Guid.NewGuid().ToString();
 
             MqttClientFactory factory = new MqttClientFactory();
             mqttClient = factory.CreateMqttClient();
@@ -66,6 +67,8 @@ namespace BitRuisseau.util
                 {
                     MessageBox.Show("Connected to MQTT broker successfully.");
 
+                    SendMessage(null, MessageType.DEMANDE_CATALOGUE);
+
                     // Se Subscribe with "No Local" option
                     var subscribeOptions = new MqttClientSubscribeOptionsBuilder()
                         .WithTopicFilter(f =>
@@ -77,7 +80,7 @@ namespace BitRuisseau.util
                     // S'abonner à un topic
                     await mqttClient.SubscribeAsync(subscribeOptions);
 
-                    SendMessage(null, MessageType.DEMANDE_CATALOGUE);
+                    
                     
                 }
             }
@@ -117,20 +120,27 @@ namespace BitRuisseau.util
             try
             {
                 GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(Encoding.UTF8.GetString(message.ApplicationMessage.Payload));
-                Debug.Write(envelope);
                 if (_clientID == envelope.SenderId) return;
 
                 switch(envelope.MessageType)
                 {
                     case MessageType.ENVOIE_CATALOGUE:
-                        var listOfMedias = JsonSerializer.Deserialize<EnvoieCatalogue>(envelope.EnveloppeJson);
-                        _senderAndTheirCatalog.Add(envelope.SenderId, listOfMedias.Content);
+                        var listOfMedias = JsonSerializer.Deserialize<CatalogSender>(envelope.EnveloppeJson);
+
+                        if (_senderAndTheirCatalog.Keys.Contains(envelope.SenderId))
+                        {
+                            _senderAndTheirCatalog[envelope.SenderId] = listOfMedias.Content;
+                        } else
+                        {
+                            _senderAndTheirCatalog.Add(envelope.SenderId, listOfMedias.Content);
+                        }
+                        OnNewMediaReceived?.Invoke();
                         break;
                     case MessageType.ENVOIE_FICHIER:
                         
                         break;
                     case MessageType.DEMANDE_CATALOGUE:
-                        EnvoieCatalogue envoieCatalogue = new EnvoieCatalogue();
+                        CatalogSender envoieCatalogue = new CatalogSender();
                         _md.PopulateMyCatalog();
                         envoieCatalogue.Content = _md.mediaLibrary;
 
@@ -155,7 +165,6 @@ namespace BitRuisseau.util
                             .WithTopic(_topic)
                             .WithPayload(JsonSerializer.Serialize(envelop))
                             .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-                            .WithRetainFlag()
                             .Build();
             await mqttClient.PublishAsync(a);
             await Task.Delay(1000);
