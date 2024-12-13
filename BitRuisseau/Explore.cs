@@ -15,7 +15,7 @@ namespace BitRuisseau
     public partial class Explore : Form
     {
         MyDocuments? md;
-        NetworkSelection networkSelection;
+        NetworkSelection? networkSelection;
 
         public Explore(Broker broker)
         {

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using BitRuisseau.Classes;
 using System.Diagnostics;
 using System.Text.Json;
+using BitRuisseau.Classes.envelops;
+using MQTTnet.Protocol;
+using BitRuisseau.Interface;
+using System.Windows.Forms;
 
 namespace BitRuisseau.util
 {
@@ -17,6 +21,10 @@ namespace BitRuisseau.util
         int mqttPort;
         string mqttUsername;
         string mqttPassword;
+        string _clientID;
+        string _topic = "test";
+
+        MyDocuments _md = new MyDocuments();
 
         /// <summary>
         /// Create a connection to the broker using mqttnet
@@ -38,6 +46,7 @@ namespace BitRuisseau.util
             mqttPort = port;
             mqttUsername = username;
             mqttPassword = password;
+            _clientID = Guid.NewGuid().ToString();
 
             MqttClientFactory factory = new MqttClientFactory();
             mqttClient = factory.CreateMqttClient();
@@ -46,7 +55,7 @@ namespace BitRuisseau.util
             MqttClientOptions options = new MqttClientOptionsBuilder()
                 .WithTcpServer(mqttHost, mqttPort)
                 .WithCredentials(mqttUsername, mqttPassword)
-                .WithClientId(Guid.NewGuid().ToString())
+                .WithClientId(_clientID)
                 .Build();
             try
             {
@@ -59,7 +68,7 @@ namespace BitRuisseau.util
                     var subscribeOptions = new MqttClientSubscribeOptionsBuilder()
                         .WithTopicFilter(f =>
                         {
-                            f.WithTopic("test");
+                            f.WithTopic(_topic);
                             f.WithNoLocal(true); // Ensure the client does not receive its own messages
                         })
                         .Build();
@@ -106,11 +115,44 @@ namespace BitRuisseau.util
                 Debug.WriteLine($"Received message: {Encoding.UTF8.GetString(message.ApplicationMessage.Payload)}");
                 GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(Encoding.UTF8.GetString(message.ApplicationMessage.Payload));
                 Debug.Write(envelope);
+                if (_clientID == envelope.SenderId) return;
+
+                switch(envelope.MessageType)
+                {
+                    case MessageType.ENVOIE_CATALOGUE:
+                        break;
+                    case MessageType.ENVOIE_FICHIER:
+                        break;
+                    case MessageType.DEMANDE_CATALOGUE:
+                        EnvoieCatalogue envoieCatalogue = new EnvoieCatalogue();
+                        _md.PopulateMyCatalog();
+                        envoieCatalogue.Content = _md.mediaLibrary;
+
+                        SendMessage(envoieCatalogue, MessageType.ENVOIE_CATALOGUE);
+                        break;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("There was an error while receiving messages", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        async public void SendMessage(IJsonSerializableMessage content, MessageType messageType)
+        {
+            GenericEnvelope envelop = new GenericEnvelope();
+            envelop.SenderId = _clientID;
+            envelop.EnveloppeJson = content.ToJson();
+            envelop.MessageType = messageType;
+
+            var a = new MqttApplicationMessageBuilder()
+                            .WithTopic(_topic)
+                            .WithPayload(JsonSerializer.Serialize(envelop))
+                            .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                            .WithRetainFlag()
+                            .Build();
+            await mqttClient.PublishAsync(a);
+            await Task.Delay(1000);
         }
     }
 }

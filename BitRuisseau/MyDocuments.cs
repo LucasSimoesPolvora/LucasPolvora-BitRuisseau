@@ -1,6 +1,7 @@
 using BitRuisseau.Classes;
 using BitRuisseau.util;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using TagLib;
 
@@ -23,29 +24,7 @@ namespace BitRuisseau
         /// </summary>
         private void populateDataGrid()
         {
-            string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\audios";
-            string[] filePaths = Directory.GetFiles(path);
-
-            filePaths.ToList().ForEach(filePath =>
-            {
-                var tfile = TagLib.File.Create(filePath);
-                string title = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath);
-                string artist = tfile.Tag.FirstArtist;
-                long size = new FileInfo(filePath).Length;
-                TimeSpan duration = new TimeSpan(tfile.Properties.Duration.Hours, tfile.Properties.Duration.Minutes, tfile.Properties.Duration.Seconds);
-                switch (tfile.Properties.MediaTypes)
-                {
-                    case TagLib.MediaTypes.Audio:
-                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Audio));
-                        break;
-                    case TagLib.MediaTypes.Video:
-                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Video));
-                        break;
-                    case TagLib.MediaTypes.Photo:
-                        mediaLibrary.Add(new Media(title, artist, size, null, MediaTypes.Photo));
-                        break;
-                }
-            });
+            PopulateMyCatalog();
             DataGrid.DataSource = mediaLibrary;
         }
 
@@ -73,6 +52,33 @@ namespace BitRuisseau
             this.Hide();
             explore.BringToFront();
 
+        }
+
+        public void PopulateMyCatalog()
+        {
+            string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\medias";
+            string[] filePaths = Directory.GetFiles(path);
+            filePaths.ToList().ForEach(filePath =>
+            {
+                string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\medias";
+                var tfile = TagLib.File.Create(filePath);
+                string title = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath);
+                string artist = tfile.Tag.FirstArtist;
+                long size = new FileInfo(filePath).Length;
+                TimeSpan duration = new TimeSpan(tfile.Properties.Duration.Hours, tfile.Properties.Duration.Minutes, tfile.Properties.Duration.Seconds);
+                switch (tfile.Properties.MediaTypes)
+                {
+                    case TagLib.MediaTypes.Audio:
+                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Audio));
+                        break;
+                    case TagLib.MediaTypes.Video:
+                        mediaLibrary.Add(new Media(title, artist, size, duration, MediaTypes.Video));
+                        break;
+                    case TagLib.MediaTypes.Photo:
+                        mediaLibrary.Add(new Media(title, artist, size, null, MediaTypes.Photo));
+                        break;
+                }
+            });
         }
 
         /// <summary>
