@@ -66,7 +66,10 @@ namespace BitRuisseau
                 string artist = tfile.Tag.FirstArtist;
                 long size = new FileInfo(filePath).Length;
                 string type = Path.GetExtension(filePath);
-                TimeSpan duration = new TimeSpan(tfile.Properties.Duration.Hours, tfile.Properties.Duration.Minutes, tfile.Properties.Duration.Seconds);
+                string minutes = tfile.Properties.Duration.Minutes < 10 ? "0" + tfile.Properties.Duration.Minutes : tfile.Properties.Duration.Minutes.ToString();
+                string seconds = tfile.Properties.Duration.Seconds < 10 ? "0" + tfile.Properties.Duration.Seconds : tfile.Properties.Duration.Seconds.ToString();
+                string hours = tfile.Properties.Duration.Hours < 10 ? "0" + tfile.Properties.Duration.Hours : tfile.Properties.Duration.Hours.ToString();
+                string duration = $"{hours}:{minutes}:{seconds}";
                 switch (tfile.Properties.MediaTypes)
                 {
                     case TagLib.MediaTypes.Audio:
