@@ -60,10 +60,9 @@ namespace BitRuisseau
             string[] filePaths = Directory.GetFiles(path);
             filePaths.ToList().ForEach(filePath =>
             {
-                string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\medias";
                 var tfile = TagLib.File.Create(filePath);
-                string title = tfile.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath);
-                string artist = tfile.Tag.FirstArtist;
+                string title = Path.GetFileNameWithoutExtension(filePath);
+                string artist = tfile.Tag.FirstArtist ?? "Unknown";
                 long size = new FileInfo(filePath).Length;
                 string type = Path.GetExtension(filePath);
                 string minutes = tfile.Properties.Duration.Minutes < 10 ? "0" + tfile.Properties.Duration.Minutes : tfile.Properties.Duration.Minutes.ToString();
@@ -93,6 +92,15 @@ namespace BitRuisseau
         private void ExitButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void DataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\medias\\" + DataGrid.CurrentRow.Cells[0].Value.ToString() + DataGrid.CurrentRow.Cells[4].Value.ToString();
+
+            mediaPlayer mp = new mediaPlayer(path);
+
+            mp.Show();
         }
     }
 }

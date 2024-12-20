@@ -170,6 +170,7 @@
             DataGrid.Name = "DataGrid";
             DataGrid.Size = new Size(550, 312);
             DataGrid.TabIndex = 0;
+            DataGrid.CellContentClick += DataGrid_CellContentClick;
             // 
             // MyDocuments
             // 
