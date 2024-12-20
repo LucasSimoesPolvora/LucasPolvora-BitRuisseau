@@ -67,7 +67,7 @@ namespace BitRuisseau.util
                 {
                     MessageBox.Show("Connected to MQTT broker successfully.");
 
-                    SendMessage(null, MessageType.DEMANDE_CATALOGUE);
+                    SendMessage(null, MessageType.CATALOG_REQUEST);
 
                     // Se Subscribe with "No Local" option
                     var subscribeOptions = new MqttClientSubscribeOptionsBuilder()
@@ -124,7 +124,7 @@ namespace BitRuisseau.util
 
                 switch(envelope.MessageType)
                 {
-                    case MessageType.ENVOIE_CATALOGUE:
+                    case MessageType.CATALOG_SENDER:
                         var listOfMedias = JsonSerializer.Deserialize<CatalogSender>(envelope.EnveloppeJson);
 
                         if (_senderAndTheirCatalog.Keys.Contains(envelope.SenderId))
@@ -136,15 +136,15 @@ namespace BitRuisseau.util
                         }
                         OnNewMediaReceived?.Invoke();
                         break;
-                    case MessageType.ENVOIE_FICHIER:
+                    case MessageType.FILE_SENDER:
                         
                         break;
-                    case MessageType.DEMANDE_CATALOGUE:
+                    case MessageType.CATALOG_REQUEST:
                         CatalogSender envoieCatalogue = new CatalogSender();
                         _md.PopulateMyCatalog();
                         envoieCatalogue.Content = _md.mediaLibrary;
 
-                        SendMessage(envoieCatalogue, MessageType.ENVOIE_CATALOGUE);
+                        SendMessage(envoieCatalogue, MessageType.CATALOG_SENDER);
                         break;
                 }
             }

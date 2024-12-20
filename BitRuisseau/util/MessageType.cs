@@ -8,8 +8,9 @@ namespace BitRuisseau.util
 {
     public enum MessageType
     {
-        ENVOIE_CATALOGUE,
-        ENVOIE_FICHIER,
-        DEMANDE_CATALOGUE
+        CATALOG_SENDER,
+        CATALOG_REQUEST,
+        FILE_SENDER,
+        FILE_REQUEST
     }
 }
