@@ -28,6 +28,7 @@ namespace BitRuisseau.util
 
         public event Action? OnNewMediaReceived;
 
+        MediaManagement mediaManagement = new MediaManagement();
         MyDocuments _md = new MyDocuments();
 
         /// <summary>
@@ -137,7 +138,8 @@ namespace BitRuisseau.util
                         OnNewMediaReceived?.Invoke();
                         break;
                     case MessageType.FILE_SENDER:
-                        
+                        FileSender fileSender = JsonSerializer.Deserialize<FileSender>(envelope.EnveloppeJson);
+                        mediaManagement.ConvertBase64ToMedia(fileSender);
                         break;
                     case MessageType.CATALOG_REQUEST:
                         CatalogSender envoieCatalogue = new CatalogSender();
@@ -145,6 +147,8 @@ namespace BitRuisseau.util
                         envoieCatalogue.Content = _md.mediaLibrary;
 
                         SendMessage(envoieCatalogue, MessageType.CATALOG_SENDER);
+                        break;
+                    case MessageType.FILE_REQUEST:
                         break;
                 }
             }
