@@ -38,13 +38,13 @@
             panel1 = new Panel();
             searchBar = new TextBox();
             panel3 = new Panel();
-            DataGrid = new DataGridView();
+            DataGridMedia = new DataGridView();
             Panel.SuspendLayout();
             panel2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)DataGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridMedia).BeginInit();
             SuspendLayout();
             // 
             // Panel
@@ -65,7 +65,7 @@
             // 
             ExitButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             ExitButton.BackColor = Color.Silver;
-            ExitButton.Location = new Point(9, 393);
+            ExitButton.Location = new Point(9, 438);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(129, 40);
             ExitButton.TabIndex = 3;
@@ -77,7 +77,7 @@
             // 
             ChooseNetworkButton.Anchor = AnchorStyles.Left;
             ChooseNetworkButton.BackColor = Color.FromArgb(192, 255, 255);
-            ChooseNetworkButton.Location = new Point(9, 291);
+            ChooseNetworkButton.Location = new Point(9, 313);
             ChooseNetworkButton.Name = "ChooseNetworkButton";
             ChooseNetworkButton.Size = new Size(129, 71);
             ChooseNetworkButton.TabIndex = 2;
@@ -88,18 +88,19 @@
             // 
             ExploreButton.Anchor = AnchorStyles.Left;
             ExploreButton.BackColor = Color.FromArgb(192, 255, 255);
-            ExploreButton.Location = new Point(9, 195);
+            ExploreButton.Location = new Point(9, 217);
             ExploreButton.Name = "ExploreButton";
             ExploreButton.Size = new Size(129, 71);
             ExploreButton.TabIndex = 1;
             ExploreButton.Text = "Explore";
             ExploreButton.UseVisualStyleBackColor = false;
+            ExploreButton.Click += ExploreButton_Click;
             // 
             // MyDocumentsButton
             // 
             MyDocumentsButton.Anchor = AnchorStyles.Left;
             MyDocumentsButton.BackColor = Color.FromArgb(192, 255, 255);
-            MyDocumentsButton.Location = new Point(9, 106);
+            MyDocumentsButton.Location = new Point(9, 128);
             MyDocumentsButton.Name = "MyDocumentsButton";
             MyDocumentsButton.Size = new Size(129, 71);
             MyDocumentsButton.TabIndex = 0;
@@ -148,27 +149,28 @@
             searchBar.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             searchBar.Location = new Point(17, 46);
             searchBar.Name = "searchBar";
-            searchBar.Size = new Size(246, 23);
+            searchBar.Size = new Size(239, 23);
             searchBar.TabIndex = 0;
             // 
             // panel3
             // 
-            panel3.Controls.Add(DataGrid);
+            panel3.Controls.Add(DataGridMedia);
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(3, 108);
             panel3.Name = "panel3";
             panel3.Size = new Size(550, 312);
             panel3.TabIndex = 1;
             // 
-            // DataGrid
+            // DataGridMedia
             // 
-            DataGrid.AllowUserToOrderColumns = true;
-            DataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DataGrid.Dock = DockStyle.Fill;
-            DataGrid.Location = new Point(0, 0);
-            DataGrid.Name = "DataGrid";
-            DataGrid.Size = new Size(550, 312);
-            DataGrid.TabIndex = 0;
+            DataGridMedia.AllowUserToOrderColumns = true;
+            DataGridMedia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridMedia.Dock = DockStyle.Fill;
+            DataGridMedia.Location = new Point(0, 0);
+            DataGridMedia.Name = "DataGridMedia";
+            DataGridMedia.Size = new Size(550, 312);
+            DataGridMedia.TabIndex = 0;
+            DataGridMedia.CellContentClick += DataGridMedia_CellContentClick_1;
             // 
             // Explore
             // 
@@ -187,7 +189,7 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)DataGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DataGridMedia).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -203,6 +205,6 @@
         private Panel panel1;
         private TextBox searchBar;
         private Panel panel3;
-        private DataGridView DataGrid;
+        private DataGridView DataGridMedia;
     }
 }

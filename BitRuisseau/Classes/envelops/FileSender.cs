@@ -11,7 +11,7 @@ namespace BitRuisseau.Classes.envelops
     public class FileSender : IJsonSerializableMessage
     {
         private string _content;
-        public Media metaData { get; set; }
+        public Media FileInfo { get; set; }
 
         public string Content { get => _content; set => _content = value; }
 

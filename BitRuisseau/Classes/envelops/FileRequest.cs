@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BitRuisseau.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,9 @@ using System.Threading.Tasks;
 
 namespace BitRuisseau.Classes.envelops
 {
-    public class FileRequest
+    public class FileRequest : IJsonSerializableMessage
     {
-        private string _name;
-
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+        public string FileName { get; set; }
 
         public string ToJson()
         {

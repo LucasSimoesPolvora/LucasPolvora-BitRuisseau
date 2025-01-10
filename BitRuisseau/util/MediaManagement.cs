@@ -19,9 +19,10 @@ namespace BitRuisseau.util
         /// <param name="filesender"></param>
         public void ConvertBase64ToMedia(FileSender filesender)
         {
-            Media media = filesender.metaData;
+            Media media = filesender.FileInfo;
             byte[] file = Convert.FromBase64String(filesender.Content);
             string filePath = path + media.Title + media.Type;
+            MessageBox.Show("Download started, you can close this window. You will receive a message when it's ready", "Info", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             File.WriteAllBytes(filePath, file);
             MessageBox.Show("Successfull download", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
@@ -33,8 +34,8 @@ namespace BitRuisseau.util
         /// <returns></returns>
         public string ConvertMediaToBase64(string fileName)
         {
-            string filePath = Path.Combine(path, fileName);
-            return Convert.ToBase64String(File.ReadAllBytes(path));
+            string filePath = path + fileName;
+            return Convert.ToBase64String(File.ReadAllBytes(filePath));
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BitRuisseau.Classes;
 using BitRuisseau.util;
+using TagLib.Flac;
 
 namespace BitRuisseau
 {
@@ -52,7 +53,7 @@ namespace BitRuisseau
         public void PopulateDataGrid()
         {
             PopulateMediaLibrary();
-            DataGrid.DataSource = ExploreMediaLibrary;
+            DataGridMedia.DataSource = ExploreMediaLibrary;
         }
 
         public void PopulateMediaLibrary()
@@ -70,26 +71,69 @@ namespace BitRuisseau
 
         private void UpdateMediaLibrary()
         {
+            this.Invoke(new Action(() =>
+            {
+
+                ExploreMediaLibrary.Clear();
+                PopulateMediaLibrary();
+
+                DataGridMedia.DataSource = null; // Reset the DataSource
+
+                
+                DataGridMedia.DataSource = ExploreMediaLibrary; // Reassign the updated list
+
+            }));
             // Ensure updates happen on the UI thread
-            if (InvokeRequired)
+            /*if (InvokeRequired)
             {
                 Invoke(new Action(UpdateMediaLibrary));
                 return;
-            }
+            }*/
 
-            ExploreMediaLibrary.Clear();
-            foreach (var sender in _broker._senderAndTheirCatalog)
-            {
-                ExploreMediaLibrary.AddRange(sender.Value);
-            }
-
-            DataGrid.DataSource = null; // Reset the DataSource
-            DataGrid.DataSource = ExploreMediaLibrary; // Reassign the updated list
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void DataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            try
+            {
+                Media chosenMeida = ExploreMediaLibrary[e.RowIndex];
+                _broker.AskForMedia(chosenMeida);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Erreur : Téléchargement du fichier impossible", "Échec du téléchargement du fichier", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DataGridMedia_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void DataGridMedia_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ExploreButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int result;
+                Int32.TryParse(searchBar.Text, out result);
+                Media chosenMeida = ExploreMediaLibrary[result];
+                _broker.AskForMedia(chosenMeida);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($"Erreur : Téléchargement du fichier impossible", "Échec du téléchargement du fichier", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace BitRuisseau.util
         string mqttUsername;
         string mqttPassword;
         string _clientID = "lucasSP";
-        string _topic = "testlucas";
+        string _topic = "1234";
 
         public Dictionary<string, List<Media>> _senderAndTheirCatalog = new Dictionary<string, List<Media>>();
 
@@ -80,9 +80,9 @@ namespace BitRuisseau.util
                         .Build();
                     // S'abonner à un topic
                     await mqttClient.SubscribeAsync(subscribeOptions);
+                    await mqttClient.SubscribeAsync(_clientID);
 
-                    
-                    
+
                 }
             }
             catch (Exception ex)
@@ -96,12 +96,15 @@ namespace BitRuisseau.util
 
         public void AskForCatalog()
         {
-            if (mqttHost == null || mqttUsername == null || mqttPassword == null)
-            {
-                MessageBox.Show("You did not established a connection to the broker", "connection not established", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            
+        }
 
+        public void AskForMedia(Media media)
+        {
+            FileRequest fileRequest = new FileRequest();
+            fileRequest.FileName = media.Title + media.Type;
 
+            SendMessage(fileRequest, MessageType.FILE_REQUEST, _senderAndTheirCatalog.First(keyValue => keyValue.Value.Contains(media)).Key);
         }
 
         public void getMessages()
@@ -126,7 +129,7 @@ namespace BitRuisseau.util
                 switch(envelope.MessageType)
                 {
                     case MessageType.CATALOG_SENDER:
-                        var listOfMedias = JsonSerializer.Deserialize<CatalogSender>(envelope.EnveloppeJson);
+                        var listOfMedias = JsonSerializer.Deserialize<CatalogSender>(envelope.EnvelopeJson);
 
                         if (_senderAndTheirCatalog.Keys.Contains(envelope.SenderId))
                         {
@@ -138,17 +141,21 @@ namespace BitRuisseau.util
                         OnNewMediaReceived?.Invoke();
                         break;
                     case MessageType.FILE_SENDER:
-                        FileSender fileSender = JsonSerializer.Deserialize<FileSender>(envelope.EnveloppeJson);
+                        FileSender fileSender = JsonSerializer.Deserialize<FileSender>(envelope.EnvelopeJson);
                         mediaManagement.ConvertBase64ToMedia(fileSender);
                         break;
                     case MessageType.CATALOG_REQUEST:
                         CatalogSender envoieCatalogue = new CatalogSender();
                         _md.PopulateMyCatalog();
                         envoieCatalogue.Content = _md.mediaLibrary;
-
                         SendMessage(envoieCatalogue, MessageType.CATALOG_SENDER);
                         break;
                     case MessageType.FILE_REQUEST:
+                        FileRequest fileRequest = JsonSerializer.Deserialize<FileRequest>(envelope.EnvelopeJson);
+                        FileSender sender = new FileSender();
+                        sender.Content = mediaManagement.ConvertMediaToBase64(fileRequest.FileName);
+                        sender.FileInfo = _md.mediaLibrary.Find(media => (media.Title + media.Type).ToString() == fileRequest.FileName);
+                        SendMessage(sender, MessageType.FILE_SENDER, envelope.SenderId);
                         break;
                 }
             }
@@ -158,20 +165,19 @@ namespace BitRuisseau.util
             }
         }
 
-        async public void SendMessage(IJsonSerializableMessage content, MessageType messageType)
+        async public void SendMessage(IJsonSerializableMessage content, MessageType messageType, string topic = "1234")
         {
             GenericEnvelope envelop = new GenericEnvelope();
             envelop.SenderId = _clientID;
-            envelop.EnveloppeJson = content == null ? null : content.ToJson();
+            envelop.EnvelopeJson = content == null ? null : content.ToJson();
             envelop.MessageType = messageType;
 
             var a = new MqttApplicationMessageBuilder()
-                            .WithTopic(_topic)
+                            .WithTopic(topic)
                             .WithPayload(JsonSerializer.Serialize(envelop))
                             .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                             .Build();
             await mqttClient.PublishAsync(a);
-            await Task.Delay(1000);
         }
     }
 }

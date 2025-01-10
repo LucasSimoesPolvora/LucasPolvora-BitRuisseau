@@ -46,6 +46,7 @@
             HostTextBox.Name = "HostTextBox";
             HostTextBox.Size = new Size(217, 23);
             HostTextBox.TabIndex = 0;
+            HostTextBox.Text = "mqtt.blue.section-inf.ch";
             // 
             // hostLabel
             // 
@@ -71,6 +72,7 @@
             UsernameTextBox.Name = "UsernameTextBox";
             UsernameTextBox.Size = new Size(217, 23);
             UsernameTextBox.TabIndex = 2;
+            UsernameTextBox.Text = "ict";
             // 
             // label1
             // 
@@ -115,6 +117,7 @@
             PortValue.Name = "PortValue";
             PortValue.Size = new Size(72, 23);
             PortValue.TabIndex = 9;
+            PortValue.Value = new decimal(new int[] { 1883, 0, 0, 0 });
             // 
             // NetworkSelection
             // 
