@@ -10,9 +10,10 @@ namespace BitRuisseau.Classes.envelops
 {
     public class FileSender : IJsonSerializableMessage
     {
-        private List<Media> _content;
+        private string _content;
+        public Media metaData { get; set; }
 
-        public List<Media> Content { get => _content; set => _content = value; }
+        public string Content { get => _content; set => _content = value; }
 
         public string ToJson()
         {
